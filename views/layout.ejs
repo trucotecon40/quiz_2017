@@ -42,9 +42,13 @@
             <a href="/users/<%= session.user.id %>/favourites">Mis Favoritos</a>
         <% } %>
         <a href="/author">Créditos</a>
+
         <% if (session.user) { %>
            <a href="/users">Usuarios</a>
         <% } %>
+
+        <a href="/help">Ayuda</a>
+
     </nav>
 
     <section class="main" id="mainSection">
