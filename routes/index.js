@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 router.get('/author', function(req, res, next) {
     res.render('author');
 });
-<<<<<<< HEAD
+
 
 
 // Autoload de rutas que usen :quizId
@@ -32,10 +32,10 @@ router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 
 
-=======
+
 // Pagina de ayuda
 router.get('/help', function(req, res, next) {
     res.render('help');
 });
->>>>>>> af3a13ac4053f96827a668c1a9eedd2152a0810b
+
 module.exports = router;
