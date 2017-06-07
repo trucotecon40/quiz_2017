@@ -178,11 +178,15 @@ exports.play = function (req, res, next) {
 exports.randomplay = function (req, res, next) {
 
     var answer = req.query.answer || '';
-    var score =  [];
+    req.session.acertadas = req.session.acertadas || [];
+    var score = req.query.score || req.session.acertadas.length;
     var quizzes= models.Quiz.count().then(function(c){
         var numQuizzes = c;
 
         var randomId = Math.floor((Math.random()*numQuizzes) + 1 );
+        while(req.session.acertadas.indexOf(randomId)==-1) {
+            randomId = Math.floor((Math.random()*numQuizzes) + 1 );
+        }
     
         models.Quiz.findById(randomId)
         .then(function (quiz) {
@@ -191,7 +195,7 @@ exports.randomplay = function (req, res, next) {
                 res.render('quizzes/random_play', {
 
                     quiz: quiz,
-                    score: quizzes
+                    score: score
                 });
             } else {
                 throw new Error('No existe ningún quiz con id=' + randomId);
@@ -206,15 +210,15 @@ exports.randomplay = function (req, res, next) {
 };
 
 
-// GET /quizzes/randomresult
-exports.randomresult = function (req, res, next) {
+// GET /quizzes/randomcheck
+exports.randomcheck = function (req, res, next) {
 
     var answer = req.query.answer || '';
+    req.session.acertadas = req.session.acertadas || [];
     var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
-    var score = req.session.correctas.length() || 0;
-
+    var score = req.session.acertadas.length;
     if (result){
-        res.session.correctas.push(req.quiz.id);
+        req.session.acertadas.push(req.quiz.id);
     }
 
     res.render('quizzes/random_result', {
