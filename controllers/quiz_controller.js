@@ -182,7 +182,7 @@ exports.randomplay = function (req, res, next) {
     var quizzes= models.Quiz.count().then(function(c){
         var numQuizzes = c;
 
-        var randomId = Math.floor((Math.random()*numQuizzes)+1);
+        var randomId = Math.floor((Math.random()*numQuizzes) + 1 );
     
         models.Quiz.findById(randomId)
         .then(function (quiz) {
