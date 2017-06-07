@@ -174,6 +174,56 @@ exports.play = function (req, res, next) {
 };
 
 
+// GET /quizzes/randomplay
+exports.randomplay = function (req, res, next) {
+
+    var answer = req.query.answer || '';
+    var score =  [];
+    var quizzes= models.Quiz.count().then(function(c){
+        var numQuizzes = c;
+
+        var randomId = Math.floor((Math.random()*numQuizzes)+1);
+    
+        models.Quiz.findById(randomId)
+        .then(function (quiz) {
+            if (quiz) {
+            
+                res.render('quizzes/random_play', {
+
+                    quiz: quiz,
+                    score: quizzes
+                });
+            } else {
+                throw new Error('No existe ningún quiz con id=' + randomId);
+            }
+        })
+        .catch(function (error) {
+            next(error);
+        });
+    }); 
+
+
+};
+
+
+// GET /quizzes/randomresult
+exports.randomresult = function (req, res, next) {
+
+    var answer = req.query.answer || '';
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    var score = req.session.correctas.length() || 0;
+
+    if (result){
+        res.session.correctas.push(req.quiz.id);
+    }
+
+    res.render('quizzes/random_result', {
+        answer: answer,
+        result: result,
+        score: score
+    });
+};
+
 // GET /quizzes/:quizId/check
 exports.check = function (req, res, next) {
 
