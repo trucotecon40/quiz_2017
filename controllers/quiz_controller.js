@@ -179,13 +179,22 @@ exports.randomplay = function (req, res, next) {
 
     var answer = req.query.answer || '';
     req.session.acertadas = req.session.acertadas || [];
+    req.session.randid = req.session.randid || [];
     var score = req.query.score || req.session.acertadas.length;
     var quizzes= models.Quiz.count().then(function(c){
         var numQuizzes = c;
 
         var randomId = Math.floor((Math.random()*numQuizzes) + 1 );
-        while(req.session.acertadas.indexOf(randomId)==-1) {
+        req.session.randid.push(randomId);
+        while(req.session.randid.indexOf(randomId)!=-1) {
             randomId = Math.floor((Math.random()*numQuizzes) + 1 );
+            if (req.session.randid.length==numQuizzes-1){
+                req.session.randid = [];
+                res.render('quizzes/random_nomore', {
+                    score: score
+                });
+                break;
+            }
         }
     
         models.Quiz.findById(randomId)
