@@ -225,10 +225,11 @@ exports.randomcheck = function (req, res, next) {
     var answer = req.query.answer || '';
     req.session.acertadas = req.session.acertadas || [];
     var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
-    var score = req.session.acertadas.length;
+    
     if (result){
         req.session.acertadas.push(req.quiz.id);
     }
+    var score = req.session.acertadas.length;
 
     res.render('quizzes/random_result', {
         answer: answer,
